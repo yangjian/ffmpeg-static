@@ -12,10 +12,8 @@ SET(ENV{PKG_CONFIG_PATH} ${CMAKE_BINARY_DIR}/lib/pkgconfig)
 
 if(APPLE)
     SET(OPENSSL_ARCH "darwin64-x86_64-cc")
-    SET(FFMPEG_CONFIG_ARGS "")
 else(APPLE)
     SET(OPENSSL_ARCH "linux-x86_64")
-    SET(FFMPEG_CONFIG_ARGS "--extra-libs=-luuid")
 endif(APPLE)
 
 SET_PROPERTY(GLOBAL PROPERTY DOWNLOAD_NO_PROGRESS 1)
@@ -140,7 +138,7 @@ EXTERNALPROJECT_ADD(
   ffmpeg
   DEPENDS nasm fdkaac lame libogg speex libvorbis opus x264 freetype openssl libpng
   URL http://www.ffmpeg.org/releases/ffmpeg-3.4.2.tar.bz2
-  CONFIGURE_COMMAND PKG_CONFIG_PATH=$ENV{PKG_CONFIG_PATH} ./configure --prefix=${CMAKE_BINARY_DIR} --datadir=${CMAKE_BINARY_DIR}/etc --disable-doc --disable-debug --disable-indevs --disable-outdevs --disable-ffplay --disable-ffserver --disable-sdl2 --disable-lzma --disable-iconv --enable-gpl --enable-version3 --enable-nonfree --enable-libfdk-aac --enable-libmp3lame --enable-libspeex --enable-libx264 --enable-libopus --enable-libfreetype --enable-openssl --extra-cflags=-I${CMAKE_BINARY_DIR}/include --extra-ldflags=-L${CMAKE_BINARY_DIR}/lib --extra-libs=-lpng\ -lz\ -lstdc++\ -lm ${FFMPEG_CONFIG_ARGS}
+  CONFIGURE_COMMAND PKG_CONFIG_PATH=$ENV{PKG_CONFIG_PATH} ./configure --prefix=${CMAKE_BINARY_DIR} --datadir=${CMAKE_BINARY_DIR}/etc --disable-doc --disable-debug --disable-indevs --disable-outdevs --disable-ffplay --disable-ffserver --disable-sdl2 --disable-lzma --disable-iconv --enable-gpl --enable-version3 --enable-nonfree --enable-libfdk-aac --enable-libmp3lame --enable-libspeex --enable-libx264 --enable-libopus --enable-libfreetype --enable-openssl --extra-cflags=-I${CMAKE_BINARY_DIR}/include --extra-ldflags=-L${CMAKE_BINARY_DIR}/lib --extra-libs=-lpng\ -lz\ -lstdc++\ -lm
   BUILD_COMMAND make
   BUILD_IN_SOURCE 1
 )
