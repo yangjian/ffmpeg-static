@@ -16,16 +16,11 @@ else(APPLE)
     SET(OPENSSL_ARCH "linux-x86_64")
 endif(APPLE)
 
-SET_PROPERTY(GLOBAL PROPERTY DOWNLOAD_NO_PROGRESS 1)
-SET_PROPERTY(GLOBAL PROPERTY BUILD_ALWAYS 0)
-
 EXTERNALPROJECT_ADD(
   nasm
   # URL http://www.nasm.us/pub/nasm/releasebuilds/2.13.03/nasm-2.13.03.tar.bz2
   URL ${CMAKE_SOURCE_DIR}/vendor/nasm-2.13.03.tar.bz2
   CONFIGURE_COMMAND ./configure --prefix=${CMAKE_BINARY_DIR}
-  DOWNLOAD_NO_PROGRESS 0
-  BUILD_ALWAYS 0
   BUILD_IN_SOURCE 1
 )
 
@@ -33,8 +28,6 @@ EXTERNALPROJECT_ADD(
   gperf
   URL http://ftp.gnu.org/pub/gnu/gperf/gperf-3.1.tar.gz
   CONFIGURE_COMMAND ./configure --prefix=${CMAKE_BINARY_DIR}
-  DOWNLOAD_NO_PROGRESS 0
-  BUILD_ALWAYS 0
   BUILD_IN_SOURCE 1
 )
 
@@ -122,6 +115,7 @@ EXTERNALPROJECT_ADD(
   GIT_TAG 7d0ff22e8c96de126be9d3de4952edd6d1b75a8c
   CONFIGURE_COMMAND ./configure --prefix=${CMAKE_BINARY_DIR} --enable-static
   BUILD_COMMAND make
+  BUILD_ALWAYS 0
   BUILD_IN_SOURCE 1
 )
 
@@ -140,5 +134,6 @@ EXTERNALPROJECT_ADD(
   URL http://www.ffmpeg.org/releases/ffmpeg-3.4.2.tar.bz2
   CONFIGURE_COMMAND PKG_CONFIG_PATH=$ENV{PKG_CONFIG_PATH} ./configure --prefix=${CMAKE_BINARY_DIR} --datadir=${CMAKE_BINARY_DIR}/etc --disable-doc --disable-debug --disable-indevs --disable-outdevs --disable-ffplay --disable-ffserver --disable-sdl2 --disable-lzma --disable-iconv --enable-gpl --enable-version3 --enable-nonfree --enable-libfdk-aac --enable-libmp3lame --enable-libspeex --enable-libx264 --enable-libopus --enable-libfreetype --enable-openssl --extra-cflags=-I${CMAKE_BINARY_DIR}/include --extra-ldflags=-L${CMAKE_BINARY_DIR}/lib --extra-libs=-lpng\ -lz\ -lstdc++\ -lm
   BUILD_COMMAND make
+  BUILD_ALWAYS 0
   BUILD_IN_SOURCE 1
 )
