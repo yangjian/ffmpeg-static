@@ -15,18 +15,11 @@ if(APPLE)
     SET(FFMPEG_CONFIG_ARGS "")
 else(APPLE)
     SET(OPENSSL_ARCH "linux-x86_64")
-    SET(FFMPEG_CONFIG_ARGS "--extra-libs=-luuid")
+    SET(FFMPEG_CONFIG_ARGS "--extra-libs=-luuid --extra-libs=-ldl")
 endif(APPLE)
 
 SET_PROPERTY(GLOBAL PROPERTY DOWNLOAD_NO_PROGRESS 1)
 SET_PROPERTY(GLOBAL PROPERTY BUILD_ALWAYS 0)
-
-EXTERNALPROJECT_ADD(
-  yasm
-  URL http://www.tortall.net/projects/yasm/releases/yasm-1.3.0.tar.gz
-  CONFIGURE_COMMAND ./configure --prefix=${CMAKE_BINARY_DIR}
-  BUILD_IN_SOURCE 1
-)
 
 EXTERNALPROJECT_ADD(
   nasm
@@ -73,7 +66,7 @@ EXTERNALPROJECT_ADD(
 
 EXTERNALPROJECT_ADD(
   openssl
-  URL http://www.openssl.org/source/openssl-1.0.2-latest.tar.gz
+  URL https://www.openssl.org/source/openssl-1.0.2o.tar.gz
   CONFIGURE_COMMAND ./Configure ${OPENSSL_ARCH} no-shared no-idea no-mdc2 no-rc5 --prefix=${CMAKE_BINARY_DIR}
   BUILD_COMMAND make depend && make
   INSTALL_COMMAND make install_sw
@@ -138,47 +131,16 @@ EXTERNALPROJECT_ADD(
   freetype
   DEPENDS bzip2 libpng gperf
   URL https://download.savannah.gnu.org/releases/freetype/freetype-2.9.tar.bz2
-  CONFIGURE_COMMAND PKG_CONFIG_PATH=$ENV{PKG_CONFIG_PATH} ./configure --prefix=${CMAKE_BINARY_DIR} --disable-shared --enable-static
+  CONFIGURE_COMMAND PKG_CONFIG_PATH=$ENV{PKG_CONFIG_PATH} ./configure --prefix=${CMAKE_BINARY_DIR} --disable-shared --enable-static --with-png=no
   INSTALL_COMMAND make install && ln -s ${CMAKE_BINARY_DIR}/include/freetype2 ${CMAKE_BINARY_DIR}/include/freetype2/freetype
   BUILD_IN_SOURCE 1
 )
 
 EXTERNALPROJECT_ADD(
-  fribidi
-  URL https://github.com/fribidi/fribidi/releases/download/0.19.7/fribidi-0.19.7.tar.bz2
-  CONFIGURE_COMMAND ./configure --prefix=${CMAKE_BINARY_DIR} --disable-shared --enable-static
-  BUILD_IN_SOURCE 1
-)
-
-EXTERNALPROJECT_ADD(
-  expat
-  URL http://downloads.sourceforge.net/project/expat/expat/2.2.0/expat-2.2.0.tar.bz2
-  CONFIGURE_COMMAND PKG_CONFIG_PATH=$ENV{PKG_CONFIG_PATH} ./configure --prefix=${CMAKE_BINARY_DIR} --disable-shared --enable-static
-  BUILD_IN_SOURCE 1
-)
-
-EXTERNALPROJECT_ADD(
-  fontconfig
-  DEPENDS freetype expat
-  URL https://www.freedesktop.org/software/fontconfig/release/fontconfig-2.12.93.tar.gz
-  CONFIGURE_COMMAND PKG_CONFIG_PATH=$ENV{PKG_CONFIG_PATH} ./configure --prefix=${CMAKE_BINARY_DIR} --disable-shared --enable-static
-  BUILD_IN_SOURCE 1
-)
-
-EXTERNALPROJECT_ADD(
-  libass
-  DEPENDS nasm freetype fribidi fontconfig
-  URL https://github.com/libass/libass/releases/download/0.13.7/libass-0.13.7.tar.gz
-  CONFIGURE_COMMAND PKG_CONFIG_PATH=$ENV{PKG_CONFIG_PATH} ./configure --prefix=${CMAKE_BINARY_DIR} --disable-shared --enable-static
-  BUILD_COMMAND make
-  BUILD_IN_SOURCE 1
-)
-
-EXTERNALPROJECT_ADD(
   ffmpeg
-  DEPENDS yasm nasm fdkaac lame libogg speex libvorbis opus x264 freetype libass openssl libpng
+  DEPENDS nasm fdkaac lame libogg speex libvorbis opus x264 freetype openssl libpng
   URL http://www.ffmpeg.org/releases/ffmpeg-3.4.2.tar.bz2
-  CONFIGURE_COMMAND PKG_CONFIG_PATH=$ENV{PKG_CONFIG_PATH} ./configure --prefix=${CMAKE_BINARY_DIR} --datadir=${CMAKE_BINARY_DIR}/etc --disable-doc --disable-debug --disable-outdevs --disable-ffplay --disable-ffserver --disable-sdl2 --disable-lzma --disable-iconv --enable-gpl --enable-version3 --enable-nonfree --enable-libfdk-aac --enable-libmp3lame --enable-libspeex --enable-libx264 --enable-libopus --enable-libfreetype --enable-libass --enable-openssl --extra-cflags=-I${CMAKE_BINARY_DIR}/include --extra-ldflags=-L${CMAKE_BINARY_DIR}/lib --extra-libs=-lstdc++ --extra-libs=-lm --extra-libs=-lz --extra-libs=-lexpat --extra-libs=-lpng --extra-libs=-ldl ${FFMPEG_CONFIG_ARGS}
+  CONFIGURE_COMMAND PKG_CONFIG_PATH=$ENV{PKG_CONFIG_PATH} ./configure --prefix=${CMAKE_BINARY_DIR} --datadir=${CMAKE_BINARY_DIR}/etc --disable-doc --disable-debug --disable-indevs --disable-outdevs --disable-ffplay --disable-ffserver --disable-sdl2 --disable-lzma --disable-iconv --enable-gpl --enable-version3 --enable-nonfree --enable-libfdk-aac --enable-libmp3lame --enable-libspeex --enable-libx264 --enable-libopus --enable-libfreetype --enable-openssl --extra-cflags=-I${CMAKE_BINARY_DIR}/include --extra-ldflags=-L${CMAKE_BINARY_DIR}/lib --extra-libs="-lpng -lz -lstdc++ -lm" ${FFMPEG_CONFIG_ARGS}
   BUILD_COMMAND make
   BUILD_IN_SOURCE 1
 )
