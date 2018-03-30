@@ -7,8 +7,6 @@ export MACOSX_DEPLOYMENT_TARGET := 10.12
 
 release:
 	@mkdir -p release && cd release && cmake -DCMAKE_BUILD_TYPE=Release .. && make
-
-pack:
 	./tools/pack.sh
 
 clean:
