@@ -2,6 +2,8 @@ PROJECT(ffmpeg_static)
 
 CMAKE_MINIMUM_REQUIRED(VERSION 3.2)
 
+set(POSITION_INDEPENDENT_CODE TRUE)
+
 INCLUDE(ExternalProject)
 
 INCLUDE_DIRECTORIES(BEFORE ${CMAKE_BINARY_DIR}/include)
@@ -131,7 +133,7 @@ EXTERNALPROJECT_ADD(
 EXTERNALPROJECT_ADD(
   ffmpeg
   DEPENDS nasm fdkaac lame libogg speex libvorbis opus x264 freetype openssl libpng
-  URL http://www.ffmpeg.org/releases/ffmpeg-4.0.2.tar.bz2
+  URL http://www.ffmpeg.org/releases/ffmpeg-4.1.tar.bz2
   CONFIGURE_COMMAND PKG_CONFIG_PATH=$ENV{PKG_CONFIG_PATH} ./configure --prefix=${CMAKE_BINARY_DIR} --datadir=${CMAKE_BINARY_DIR}/etc --disable-doc --disable-debug --disable-indevs --disable-outdevs --disable-ffplay --disable-sdl2 --disable-lzma --disable-iconv --enable-gpl --enable-version3 --enable-nonfree --enable-libfdk-aac --enable-libmp3lame --enable-libspeex --enable-libx264 --enable-libopus --enable-libfreetype --enable-openssl --extra-cflags=-I${CMAKE_BINARY_DIR}/include --extra-ldflags=-L${CMAKE_BINARY_DIR}/lib --extra-libs=-lpng\ -lz\ -lstdc++\ -lm\ -lbz2\ -ldl
   BUILD_COMMAND make
   BUILD_ALWAYS 0
