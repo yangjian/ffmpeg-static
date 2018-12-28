@@ -20,8 +20,7 @@ endif(APPLE)
 
 EXTERNALPROJECT_ADD(
   nasm
-  # URL http://www.nasm.us/pub/nasm/releasebuilds/2.13.03/nasm-2.13.03.tar.bz2
-  URL ${CMAKE_SOURCE_DIR}/vendor/nasm-2.13.03.tar.bz2
+  URL http://www.nasm.us/pub/nasm/releasebuilds/2.14.02/nasm-2.14.02.tar.bz2
   CONFIGURE_COMMAND ./configure --prefix=${CMAKE_BINARY_DIR}
   BUILD_IN_SOURCE 1
 )
@@ -52,7 +51,7 @@ EXTERNALPROJECT_ADD(
 EXTERNALPROJECT_ADD(
   libpng
   DEPENDS zlib
-  URL https://download.sourceforge.net/libpng/libpng-1.6.34.tar.gz
+  URL https://download.sourceforge.net/libpng/libpng-1.6.36.tar.gz
   CONFIGURE_COMMAND CFLAGS=-I${CMAKE_BINARY_DIR}/include CPPFLAGS=-I${CMAKE_BINARY_DIR}/include LDFLAGS=-L${CMAKE_BINARY_DIR}/lib ./configure --prefix=${CMAKE_BINARY_DIR} --disable-shared --enable-static
   BUILD_IN_SOURCE 1
 )
@@ -68,7 +67,7 @@ EXTERNALPROJECT_ADD(
 
 EXTERNALPROJECT_ADD(
   fdkaac
-  URL http://downloads.sourceforge.net/project/opencore-amr/fdk-aac/fdk-aac-0.1.5.tar.gz
+  URL http://downloads.sourceforge.net/project/opencore-amr/fdk-aac/fdk-aac-2.0.0.tar.gz
   CONFIGURE_COMMAND ./configure --prefix=${CMAKE_BINARY_DIR} --disable-shared --enable-static
   BUILD_IN_SOURCE 1
 )
@@ -114,7 +113,7 @@ EXTERNALPROJECT_ADD(
   x264
   DEPENDS nasm
   GIT_REPOSITORY http://git.videolan.org/git/x264.git
-  GIT_TAG 7d0ff22e8c96de126be9d3de4952edd6d1b75a8c
+  GIT_TAG 545de2ffec6ae9a80738de1b2c8cf820249a2530
   CONFIGURE_COMMAND ./configure --prefix=${CMAKE_BINARY_DIR} --enable-static
   BUILD_COMMAND make
   BUILD_ALWAYS 0
