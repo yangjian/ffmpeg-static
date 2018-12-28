@@ -72,9 +72,9 @@ LIST(APPEND FFMPEG_COMPONENTS --enable-avcodec --enable-avformat --enable-avfilt
 LIST(APPEND FFMPEG_COMPONENTS --enable-demuxer=mov,mpegts)
 LIST(APPEND FFMPEG_COMPONENTS --enable-muxer=rawvideo,mp4,mov,mpegts,dash,hls,segment,tee)
 LIST(APPEND FFMPEG_COMPONENTS --enable-decoder=h264 --enable-decoder=aac)
-LIST(APPEND FFMPEG_COMPONENTS --enable-encoder=libx264,libfdk_aac,png)
-LIST(APPEND FFMPEG_COMPONENTS --enable-filter=copy,concat,scale,split,setpts)
-LIST(APPEND FFMPEG_COMPONENTS --enable-bsf=h264_mp4toannexb --enable-parser=h264)
+LIST(APPEND FFMPEG_COMPONENTS --enable-encoder=libx264,libfdk_aac,aac,png)
+LIST(APPEND FFMPEG_COMPONENTS --enable-filter=copy,concat,scale,split,setpts,bwdif)
+LIST(APPEND FFMPEG_COMPONENTS --enable-bsf=h264_mp4toannexb --enable-parser=h264,aac,png)
 LIST(APPEND FFMPEG_COMPONENTS --enable-protocol=file,pipe,unix,concat)
 LIST(APPEND FFMPEG_COMPONENTS --extra-cflags=-I${CMAKE_BINARY_DIR}/include --extra-ldflags=-L${CMAKE_BINARY_DIR}/lib --extra-libs=-lpng\ -lz\ -lstdc++\ -lm\ -ldl)
 
