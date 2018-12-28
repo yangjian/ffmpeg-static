@@ -9,7 +9,6 @@ INCLUDE(ExternalProject)
 INCLUDE_DIRECTORIES(BEFORE ${CMAKE_BINARY_DIR}/include)
 LINK_DIRECTORIES(${CMAKE_BINARY_DIR}/lib)
 
-SET(ENV{PATH} ${CMAKE_BINARY_DIR}/bin:$ENV{PATH})
 SET(ENV{PKG_CONFIG_PATH} ${CMAKE_BINARY_DIR}/lib/pkgconfig)
 
 if(APPLE)
@@ -20,8 +19,7 @@ endif(APPLE)
 
 EXTERNALPROJECT_ADD(
   nasm
-  # URL http://www.nasm.us/pub/nasm/releasebuilds/2.13.03/nasm-2.13.03.tar.bz2
-  URL ${CMAKE_SOURCE_DIR}/../vendor/nasm-2.13.03.tar.bz2
+  URL https://www.nasm.us/pub/nasm/releasebuilds/2.14.02/nasm-2.14.02.tar.bz2
   CONFIGURE_COMMAND ./configure --prefix=${CMAKE_BINARY_DIR}
   BUILD_IN_SOURCE 1
 )
@@ -29,7 +27,7 @@ EXTERNALPROJECT_ADD(
 EXTERNALPROJECT_ADD(
   gperf
   URL http://ftp.gnu.org/pub/gnu/gperf/gperf-3.1.tar.gz
-  CONFIGURE_COMMAND ./configure --prefix=${CMAKE_BINARY_DIR}
+  CONFIGURE_COMMAND ./configure --prefix=${CMAKE_BINARY_DIR} --enable-pic
   BUILD_IN_SOURCE 1
 )
 
@@ -60,7 +58,7 @@ EXTERNALPROJECT_ADD(
   DEPENDS nasm
   GIT_REPOSITORY http://git.videolan.org/git/x264.git
   GIT_TAG 545de2ffec6ae9a80738de1b2c8cf820249a2530
-  CONFIGURE_COMMAND ./configure --prefix=${CMAKE_BINARY_DIR} --bit-depth=8 --chroma-format=all --enable-static --enable-lto --enable-pic --enable-strip --disable-cli --disable-gpl --disable-avs --disable-ffms --disable-swscale --disable-gpac --disable-lsmash
+  CONFIGURE_COMMAND ./configure --prefix=${CMAKE_BINARY_DIR} --bit-depth=8 --chroma-format=all --enable-static --enable-pic --enable-strip --disable-cli --disable-gpl --disable-avs --disable-ffms --disable-swscale --disable-gpac --disable-lsmash
   BUILD_COMMAND make
   BUILD_ALWAYS 0
   BUILD_IN_SOURCE 1
@@ -68,7 +66,7 @@ EXTERNALPROJECT_ADD(
 
 SET(FFMPEG_COMPONENTS --disable-everything --disable-postproc --disable-doc --disable-debug)
 LIST(APPEND FFMPEG_COMPONENTS --disable-indevs --disable-outdevs --disable-ffplay --disable-sdl2 --disable-lzma --disable-iconv)
-LIST(APPEND FFMPEG_COMPONENTS --enable-gpl --enable-nonfree --enable-pic --enable-lto)
+LIST(APPEND FFMPEG_COMPONENTS --enable-gpl --enable-nonfree --enable-pic)
 LIST(APPEND FFMPEG_COMPONENTS --enable-libfdk-aac --enable-libx264 --enable-ffmpeg --enable-ffprobe)
 LIST(APPEND FFMPEG_COMPONENTS --enable-avcodec --enable-avformat --enable-avfilter --enable-swresample --enable-swscale)
 LIST(APPEND FFMPEG_COMPONENTS --enable-demuxer=mov,mpegts)
@@ -82,7 +80,7 @@ LIST(APPEND FFMPEG_COMPONENTS --extra-cflags=-I${CMAKE_BINARY_DIR}/include --ext
 
 EXTERNALPROJECT_ADD(
   ffmpeg
-  DEPENDS nasm fdkaac x264 libpng
+  DEPENDS nasm gperf x264 fdkaac libpng
   URL http://www.ffmpeg.org/releases/ffmpeg-4.1.tar.bz2
   CONFIGURE_COMMAND PKG_CONFIG_PATH=$ENV{PKG_CONFIG_PATH} ./configure --prefix=${CMAKE_BINARY_DIR} --datadir=${CMAKE_BINARY_DIR}/etc ${FFMPEG_COMPONENTS}
   BUILD_COMMAND make
