@@ -60,7 +60,7 @@ EXTERNALPROJECT_ADD(
 SET(FFMPEG_COMPONENTS --disable-doc --disable-postproc --disable-debug --disable-indevs --disable-outdevs --disable-sdl2 --disable-lzma --disable-iconv)
 LIST(APPEND FFMPEG_COMPONENTS --enable-gpl --enable-pic --enable-libx264 --enable-ffmpeg --enable-ffprobe --disable-ffplay --disable-hwaccels)
 LIST(APPEND FFMPEG_COMPONENTS --enable-avcodec --enable-avformat --enable-avfilter --enable-swresample --enable-swscale --enable-avutil)
-LIST(APPEND FFMPEG_COMPONENTS --disable-demuxers --enable-demuxer=mov,mpegts,h264,hevc,aac,rawvideo)
+LIST(APPEND FFMPEG_COMPONENTS --disable-demuxers --enable-demuxer=mov,mpegts,h264,hevc,aac,rawvideo,concat)
 LIST(APPEND FFMPEG_COMPONENTS --disable-muxers --enable-muxer=mp4,mov,mpegts,dash,hls,segment,tee,h264,hevc,aac,rawvideo)
 LIST(APPEND FFMPEG_COMPONENTS --disable-decoders --enable-decoder=h264,hevc,aac)
 LIST(APPEND FFMPEG_COMPONENTS --disable-encoders --enable-encoder=libx264,aac,png)
