@@ -47,13 +47,6 @@ EXTERNALPROJECT_ADD(
 )
 
 EXTERNALPROJECT_ADD(
-  fdkaac
-  URL http://downloads.sourceforge.net/project/opencore-amr/fdk-aac/fdk-aac-2.0.0.tar.gz
-  CONFIGURE_COMMAND ./configure --prefix=${CMAKE_BINARY_DIR} --disable-shared --enable-static
-  BUILD_IN_SOURCE 1
-)
-
-EXTERNALPROJECT_ADD(
   x264
   DEPENDS nasm
   GIT_REPOSITORY http://git.videolan.org/git/x264.git
@@ -64,23 +57,20 @@ EXTERNALPROJECT_ADD(
   BUILD_IN_SOURCE 1
 )
 
-SET(FFMPEG_COMPONENTS --disable-everything --disable-postproc --disable-doc --disable-debug)
-LIST(APPEND FFMPEG_COMPONENTS --disable-indevs --disable-outdevs --disable-ffplay --disable-sdl2 --disable-lzma --disable-iconv)
-LIST(APPEND FFMPEG_COMPONENTS --enable-gpl --enable-nonfree --enable-pic)
-LIST(APPEND FFMPEG_COMPONENTS --enable-libfdk-aac --enable-libx264 --enable-ffmpeg --enable-ffprobe)
-LIST(APPEND FFMPEG_COMPONENTS --enable-avcodec --enable-avformat --enable-avfilter --enable-swresample --enable-swscale)
-LIST(APPEND FFMPEG_COMPONENTS --enable-demuxer=mov,mpegts)
-LIST(APPEND FFMPEG_COMPONENTS --enable-muxer=rawvideo,mp4,mov,mpegts,dash,hls,segment,tee)
-LIST(APPEND FFMPEG_COMPONENTS --enable-decoder=h264 --enable-decoder=aac)
-LIST(APPEND FFMPEG_COMPONENTS --enable-encoder=libx264,libfdk_aac,aac,png)
-LIST(APPEND FFMPEG_COMPONENTS --enable-filter=copy,concat,scale,split,setpts,bwdif)
-LIST(APPEND FFMPEG_COMPONENTS --enable-bsf=h264_mp4toannexb --enable-parser=h264,aac,png)
-LIST(APPEND FFMPEG_COMPONENTS --enable-protocol=file,pipe,unix,concat)
+SET(FFMPEG_COMPONENTS --disable-doc --disable-postproc --disable-debug --disable-indevs --disable-outdevs --disable-sdl2 --disable-lzma --disable-iconv)
+LIST(APPEND FFMPEG_COMPONENTS --enable-gpl --enable-pic --enable-libx264 --enable-ffmpeg --enable-ffprobe --disable-ffplay --disable-hwaccels)
+LIST(APPEND FFMPEG_COMPONENTS --enable-avcodec --enable-avformat --enable-avfilter --enable-swresample --enable-swscale --enable-avutil)
+LIST(APPEND FFMPEG_COMPONENTS --disable-demuxers --enable-demuxer=mov,mpegts,h264,hevc,aac,rawvideo)
+LIST(APPEND FFMPEG_COMPONENTS --disable-muxers --enable-muxer=mp4,mov,mpegts,dash,hls,segment,tee,h264,hevc,aac,rawvideo)
+LIST(APPEND FFMPEG_COMPONENTS --disable-decoders --enable-decoder=h264,hevc,aac)
+LIST(APPEND FFMPEG_COMPONENTS --disable-encoders --enable-encoder=libx264,aac,png)
+LIST(APPEND FFMPEG_COMPONENTS --disable-filters --enable-filter=scale,copy,concat,split,setpts,bwdif)
+LIST(APPEND FFMPEG_COMPONENTS --disable-protocols --enable-protocol=file,pipe,unix,concat)
 LIST(APPEND FFMPEG_COMPONENTS --extra-cflags=-I${CMAKE_BINARY_DIR}/include --extra-ldflags=-L${CMAKE_BINARY_DIR}/lib --extra-libs=-lpng\ -lz\ -lstdc++\ -lm\ -ldl)
 
 EXTERNALPROJECT_ADD(
   ffmpeg
-  DEPENDS nasm gperf x264 fdkaac libpng
+  DEPENDS nasm gperf x264 libpng
   URL http://www.ffmpeg.org/releases/ffmpeg-4.1.tar.bz2
   CONFIGURE_COMMAND PKG_CONFIG_PATH=$ENV{PKG_CONFIG_PATH} ./configure --prefix=${CMAKE_BINARY_DIR} --datadir=${CMAKE_BINARY_DIR}/etc ${FFMPEG_COMPONENTS}
   BUILD_COMMAND make
