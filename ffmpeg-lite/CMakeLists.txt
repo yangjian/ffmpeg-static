@@ -34,7 +34,11 @@ EXTERNALPROJECT_ADD(
 EXTERNALPROJECT_ADD(
   zlib
   URL https://github.com/madler/zlib/archive/v1.2.11.tar.gz
-  CONFIGURE_COMMAND ./configure --prefix=${CMAKE_BINARY_DIR} --static
+  # CONFIGURE_COMMAND ./configure --prefix=${CMAKE_BINARY_DIR} --static
+  # CONFIGURE_COMMAND sh -c "rm -rf ./build && mkdir build && cd ./build && cmake -Wno-dev -GNinja -DCMAKE_BUILD_TYPE=Release .."
+  CONFIGURE_COMMAND sh -c "rm -rf ./build && mkdir build && cd ./build && cmake -DCMAKE_BUILD_TYPE=Release .."
+  BUILD_COMMAND sh -c "cd ./build && make"
+  INSTALL_COMMAND sh -c "cd ./build && make DESTDIR=${CMAKE_BINARY_DIR} install"
   BUILD_IN_SOURCE 1
 )
 
