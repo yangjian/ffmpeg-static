@@ -62,7 +62,7 @@ LIST(APPEND FFMPEG_COMPONENTS --enable-static --enable-gpl --enable-pic --enable
 LIST(APPEND FFMPEG_COMPONENTS --enable-avcodec --enable-avformat --enable-avfilter --enable-swresample --enable-swscale --enable-avutil)
 LIST(APPEND FFMPEG_COMPONENTS --disable-demuxers --enable-demuxer=mov,mpegts,h264,hevc,aac,rawvideo,concat,image2)
 LIST(APPEND FFMPEG_COMPONENTS --disable-muxers --enable-muxer=mp4,mov,mpegts,dash,hls,segment,tee,h264,hevc,aac,rawvideo,image2)
-LIST(APPEND FFMPEG_COMPONENTS --disable-decoders --enable-decoder=h264,hevc,aac,mjpeg,png)
+LIST(APPEND FFMPEG_COMPONENTS --disable-decoders --enable-decoder=h264,hevc,aac,mjpeg,png,rawvideo)
 LIST(APPEND FFMPEG_COMPONENTS --disable-encoders --enable-encoder=libx264,aac,mjpeg,png)
 LIST(APPEND FFMPEG_COMPONENTS --disable-filters --enable-filter=scale,copy,concat,split,setpts,bwdif)
 LIST(APPEND FFMPEG_COMPONENTS --disable-protocols --enable-protocol=file,pipe,unix,concat)
