@@ -1,13 +1,18 @@
 #!/bin/bash
 
+if [ "$#" -ne 2 ]; then
+    echo "usage: pack.sh SRC_DIR DST_DIR"
+    exit 1
+fi
+
 set -Eeuo pipefail
 
 TOOL_DIR="$(cd "$(dirname "$0")" && pwd)"
 ROOT_PROJECT_DIR="$(dirname "$TOOL_DIR")"
 
-BASE_DIR=$1
-SRC_DIR="${BASE_DIR}/release"
-OUT_DIR="${BASE_DIR}/output/ffmpeg"
+SRC_DIR="$1"
+DST_DIR="$2"
+OUT_DIR=${DST_DIR}/ffmpeg
 
 rm -rf ${OUT_DIR}
 mkdir -p ${OUT_DIR}/bin ${OUT_DIR}/lib ${OUT_DIR}/include

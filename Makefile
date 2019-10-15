@@ -3,24 +3,34 @@ export PATH := $(shell pwd)/ffmpeg-full/release/bin:$(PATH)
 export PATH := $(shell pwd)/ffmpeg-lite/release/bin:$(PATH)
 export MACOSX_DEPLOYMENT_TARGET := 10.12
 
-.PHONY: full lite release clean distclean
+.PHONY: full lite build clean distclean
 
-all: release
+all: build
 
 full:
-	mkdir -p ffmpeg-full/release && cd ffmpeg-full/release && cmake -DCMAKE_BUILD_TYPE=Release .. && make
-	./tools/pack.sh ffmpeg-full
+	make -C ffmpeg-full build
 
 lite:
-	mkdir -p ffmpeg-lite/release && cd ffmpeg-lite/release && cmake -DCMAKE_BUILD_TYPE=Release .. && make
-	./tools/pack.sh ffmpeg-lite
+	make -C ffmpeg-lite build
 
-release: full lite
+build: full lite
+
+docker-image-debian-8:
+	docker build -t ffmpeg-static-builder-debian-8 -f docker/debian-8.dockerfile .
+
+docker-image-debian-9:
+	docker build -t ffmpeg-static-builder-debian-9 -f docker/debian-9.dockerfile .
+
+full-debian-8:
+	docker run -it --rm -v "$(shell pwd)":/mount -e SRC_DIR=ffmpeg-full -e DST_DIR=/mount/ffmpeg-full/debian-8-output ffmpeg-static-builder-debian-8
+
+lite-debian-8:
+	docker run -it --rm -v "$(shell pwd)":/mount -e SRC_DIR=ffmpeg-lite -e DST_DIR=/mount/ffmpeg-lite/debian-8-output ffmpeg-static-builder-debian-8
 
 clean:
-	-test -d ffmpeg-full/release && cd ffmpeg-full/release && make clean
-	-test -d ffmpeg-lite/release && cd ffmpeg-lite/release && make clean
+	make -C ffmpeg-full clean
+	make -C ffmpeg-lite clean
 
 distclean:
-	rm -rf ffmpeg-full/release
-	rm -rf ffmpeg-lite/release
+	make -C ffmpeg-full distclean
+	make -C ffmpeg-lite distclean

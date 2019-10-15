@@ -17,42 +17,38 @@ else(APPLE)
     SET(OPENSSL_ARCH "linux-x86_64")
 endif(APPLE)
 
-EXTERNALPROJECT_ADD(
-  nasm
+EXTERNALPROJECT_ADD(nasm
   URL https://www.nasm.us/pub/nasm/releasebuilds/2.14.02/nasm-2.14.02.tar.bz2
   CONFIGURE_COMMAND ./configure --prefix=${CMAKE_BINARY_DIR}
   BUILD_IN_SOURCE 1
 )
 
-EXTERNALPROJECT_ADD(
-  gperf
+EXTERNALPROJECT_ADD(gperf
   URL http://ftp.gnu.org/pub/gnu/gperf/gperf-3.1.tar.gz
   CONFIGURE_COMMAND ./configure --prefix=${CMAKE_BINARY_DIR} --enable-pic
   BUILD_IN_SOURCE 1
 )
 
-EXTERNALPROJECT_ADD(
-  zlib
+EXTERNALPROJECT_ADD(zlib
   URL https://github.com/madler/zlib/archive/v1.2.11.tar.gz
   CONFIGURE_COMMAND ./configure --prefix=${CMAKE_BINARY_DIR} --static
   BUILD_IN_SOURCE 1
 )
 
-EXTERNALPROJECT_ADD(
-  libpng
+EXTERNALPROJECT_ADD(libpng
   DEPENDS zlib
-  URL https://download.sourceforge.net/libpng/libpng-1.6.36.tar.gz
+  URL https://download.sourceforge.net/libpng/libpng-1.6.37.tar.gz
   CONFIGURE_COMMAND CFLAGS=-I${CMAKE_BINARY_DIR}/include CPPFLAGS=-I${CMAKE_BINARY_DIR}/include LDFLAGS=-L${CMAKE_BINARY_DIR}/lib ./configure --prefix=${CMAKE_BINARY_DIR} --disable-shared --enable-static
   BUILD_IN_SOURCE 1
 )
 
-EXTERNALPROJECT_ADD(
-  x264
+EXTERNALPROJECT_ADD(x264
   DEPENDS nasm
   GIT_REPOSITORY http://git.videolan.org/git/x264.git
-  GIT_TAG 545de2ffec6ae9a80738de1b2c8cf820249a2530
+  GIT_TAG stable
+  GIT_SHALLOW 1
   CONFIGURE_COMMAND ./configure --prefix=${CMAKE_BINARY_DIR} --bit-depth=8 --chroma-format=all --enable-static --enable-pic --enable-strip --disable-cli --disable-gpl --disable-avs --disable-ffms --disable-swscale --disable-gpac --disable-lsmash
-  BUILD_COMMAND make
+  BUILD_COMMAND $(MAKE)
   BUILD_ALWAYS 0
   BUILD_IN_SOURCE 1
 )
@@ -68,12 +64,11 @@ LIST(APPEND FFMPEG_COMPONENTS --disable-filters --enable-filter=scale,copy,conca
 LIST(APPEND FFMPEG_COMPONENTS --disable-protocols --enable-protocol=file,pipe,unix,concat)
 LIST(APPEND FFMPEG_COMPONENTS --extra-cflags=-I${CMAKE_BINARY_DIR}/include --extra-ldflags=-L${CMAKE_BINARY_DIR}/lib --extra-libs=-lpng\ -lz\ -lstdc++\ -lm\ -ldl)
 
-EXTERNALPROJECT_ADD(
-  ffmpeg
+EXTERNALPROJECT_ADD(ffmpeg
   DEPENDS nasm gperf x264 libpng
-  URL http://www.ffmpeg.org/releases/ffmpeg-4.1.tar.bz2
+  URL http://www.ffmpeg.org/releases/ffmpeg-4.2.1.tar.bz2
   CONFIGURE_COMMAND PKG_CONFIG_PATH=$ENV{PKG_CONFIG_PATH} ./configure --prefix=${CMAKE_BINARY_DIR} --datadir=${CMAKE_BINARY_DIR}/etc ${FFMPEG_COMPONENTS}
-  BUILD_COMMAND make
+  BUILD_COMMAND $(MAKE)
   BUILD_ALWAYS 0
   BUILD_IN_SOURCE 1
 )

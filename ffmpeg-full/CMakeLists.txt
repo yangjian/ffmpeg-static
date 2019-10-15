@@ -44,14 +44,14 @@ EXTERNALPROJECT_ADD(
   URL https://fossies.org/linux/misc/bzip2-1.0.6.tar.gz
   URL_MD5 00b516f4704d4a7cb50a1d97e6e8e15b
   CONFIGURE_COMMAND ""
-  INSTALL_COMMAND make install PREFIX=${CMAKE_BINARY_DIR}
+  INSTALL_COMMAND $(MAKE) install PREFIX=${CMAKE_BINARY_DIR}
   BUILD_IN_SOURCE 1
 )
 
 EXTERNALPROJECT_ADD(
   libpng
   DEPENDS zlib
-  URL https://download.sourceforge.net/libpng/libpng-1.6.36.tar.gz
+  URL https://download.sourceforge.net/libpng/libpng-1.6.37.tar.gz
   CONFIGURE_COMMAND CFLAGS=-I${CMAKE_BINARY_DIR}/include CPPFLAGS=-I${CMAKE_BINARY_DIR}/include LDFLAGS=-L${CMAKE_BINARY_DIR}/lib ./configure --prefix=${CMAKE_BINARY_DIR} --disable-shared --enable-static
   BUILD_IN_SOURCE 1
 )
@@ -60,8 +60,8 @@ EXTERNALPROJECT_ADD(
   openssl
   URL https://www.openssl.org/source/openssl-1.0.2o.tar.gz
   CONFIGURE_COMMAND ./Configure ${OPENSSL_ARCH} no-shared no-idea no-mdc2 no-rc5 --prefix=${CMAKE_BINARY_DIR}
-  BUILD_COMMAND make depend && make
-  INSTALL_COMMAND make install_sw
+  BUILD_COMMAND $(MAKE) depend && $(MAKE)
+  INSTALL_COMMAND $(MAKE) install_sw
   BUILD_IN_SOURCE 1
 )
 
@@ -115,7 +115,7 @@ EXTERNALPROJECT_ADD(
   GIT_REPOSITORY http://git.videolan.org/git/x264.git
   GIT_TAG 545de2ffec6ae9a80738de1b2c8cf820249a2530
   CONFIGURE_COMMAND ./configure --prefix=${CMAKE_BINARY_DIR} --enable-static
-  BUILD_COMMAND make
+  BUILD_COMMAND $(MAKE)
   BUILD_ALWAYS 0
   BUILD_IN_SOURCE 1
 )
@@ -125,7 +125,7 @@ EXTERNALPROJECT_ADD(
   DEPENDS bzip2 libpng gperf
   URL https://download.savannah.gnu.org/releases/freetype/freetype-2.9.tar.bz2
   CONFIGURE_COMMAND PKG_CONFIG_PATH=$ENV{PKG_CONFIG_PATH} ./configure --prefix=${CMAKE_BINARY_DIR} --disable-shared --enable-static --with-png=no --with-harfbuzz=no
-  INSTALL_COMMAND make install && ln -s ${CMAKE_BINARY_DIR}/include/freetype2 ${CMAKE_BINARY_DIR}/include/freetype2/freetype
+  INSTALL_COMMAND $(MAKE) install && ln -s ${CMAKE_BINARY_DIR}/include/freetype2 ${CMAKE_BINARY_DIR}/include/freetype2/freetype
   BUILD_IN_SOURCE 1
 )
 
@@ -134,7 +134,7 @@ EXTERNALPROJECT_ADD(
   DEPENDS nasm fdkaac lame libogg speex libvorbis opus x264 freetype openssl libpng
   URL http://www.ffmpeg.org/releases/ffmpeg-4.1.tar.bz2
   CONFIGURE_COMMAND PKG_CONFIG_PATH=$ENV{PKG_CONFIG_PATH} ./configure --prefix=${CMAKE_BINARY_DIR} --datadir=${CMAKE_BINARY_DIR}/etc --disable-doc --disable-debug --disable-indevs --disable-outdevs --disable-ffplay --disable-sdl2 --disable-lzma --disable-iconv --enable-gpl --enable-version3 --enable-nonfree --enable-libfdk-aac --enable-libmp3lame --enable-libspeex --enable-libx264 --enable-libopus --enable-libfreetype --enable-openssl --extra-cflags=-I${CMAKE_BINARY_DIR}/include --extra-ldflags=-L${CMAKE_BINARY_DIR}/lib --extra-libs=-lpng\ -lz\ -lstdc++\ -lm\ -lbz2\ -ldl
-  BUILD_COMMAND make
+  BUILD_COMMAND $(MAKE)
   BUILD_ALWAYS 0
   BUILD_IN_SOURCE 1
 )
