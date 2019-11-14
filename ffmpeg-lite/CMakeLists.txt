@@ -56,7 +56,7 @@ EXTERNALPROJECT_ADD(x264
 SET(FFMPEG_COMPONENTS --disable-doc --disable-postproc --disable-debug --disable-indevs --disable-outdevs --disable-sdl2 --disable-lzma --disable-iconv)
 LIST(APPEND FFMPEG_COMPONENTS --enable-static --enable-gpl --enable-pic --enable-libx264 --enable-ffmpeg --enable-ffprobe --disable-ffplay --disable-hwaccels --disable-v4l2-m2m --disable-vaapi --disable-vdpau --disable-videotoolbox --disable-audiotoolbox)
 LIST(APPEND FFMPEG_COMPONENTS --enable-avcodec --enable-avformat --enable-avfilter --enable-swresample --enable-swscale --enable-avutil)
-LIST(APPEND FFMPEG_COMPONENTS --disable-demuxers --enable-demuxer=mov,mpegts,h264,hevc,aac,rawvideo,concat,image2)
+LIST(APPEND FFMPEG_COMPONENTS --disable-demuxers --enable-demuxer=mov,mpegts,h264,hevc,aac,rawvideo,streamconcat,concat,image2)
 LIST(APPEND FFMPEG_COMPONENTS --disable-muxers --enable-muxer=mp4,mov,mpegts,dash,hls,segment,tee,h264,hevc,aac,rawvideo,image2)
 LIST(APPEND FFMPEG_COMPONENTS --disable-decoders --enable-decoder=h264,hevc,aac,mjpeg,png,rawvideo)
 LIST(APPEND FFMPEG_COMPONENTS --disable-encoders --enable-encoder=libx264,aac,mjpeg,png)
@@ -67,6 +67,7 @@ LIST(APPEND FFMPEG_COMPONENTS --extra-cflags=-I${CMAKE_BINARY_DIR}/include --ext
 EXTERNALPROJECT_ADD(ffmpeg
   DEPENDS nasm gperf x264 libpng
   URL http://www.ffmpeg.org/releases/ffmpeg-4.2.1.tar.bz2
+  PATCH_COMMAND ${CMAKE_SOURCE_DIR}/../patches/patch.sh ffmpeg
   CONFIGURE_COMMAND PKG_CONFIG_PATH=$ENV{PKG_CONFIG_PATH} ./configure --prefix=${CMAKE_BINARY_DIR} --datadir=${CMAKE_BINARY_DIR}/etc ${FFMPEG_COMPONENTS}
   BUILD_COMMAND $(MAKE)
   BUILD_ALWAYS 0

@@ -27,6 +27,12 @@ full-debian-8:
 lite-debian-8:
 	docker run -it --rm -v "$(shell pwd)":/mount -e SRC_DIR=ffmpeg-lite -e DST_DIR=/mount/ffmpeg-lite/debian-8-output ffmpeg-static-builder-debian-8
 
+full-debian-9:
+	docker run -it --rm -v "$(shell pwd)":/mount -e SRC_DIR=ffmpeg-full -e DST_DIR=/mount/ffmpeg-full/debian-9-output ffmpeg-static-builder-debian-9
+
+lite-debian-9:
+	docker run -it --rm -v "$(shell pwd)":/mount -e SRC_DIR=ffmpeg-lite -e DST_DIR=/mount/ffmpeg-lite/debian-9-output ffmpeg-static-builder-debian-9
+
 clean:
 	make -C ffmpeg-full clean
 	make -C ffmpeg-lite clean
