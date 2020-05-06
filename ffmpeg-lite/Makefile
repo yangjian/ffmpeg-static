@@ -1,6 +1,7 @@
 # MUST update PATH so that x264 can find nasm
 export PATH := $(shell pwd)/build/bin:$(PATH)
 export MACOSX_DEPLOYMENT_TARGET := 10.12
+export CMAKE_OSX_ARCHITECTURES := x86_64
 
 .PHONY: all build clean distclean
 
