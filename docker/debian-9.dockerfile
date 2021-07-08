@@ -13,7 +13,7 @@ RUN cd /tmp && \
 
 COPY . .
 
-ENV SRC_DIR
-ENV DST_DIR
+ENV SRC_DIR ""
+ENV DST_DIR ""
 
 CMD ["bash", "-c", "make -C $SRC_DIR && rm -rf $DST_DIR && cp -r ${SRC_DIR}/output $DST_DIR"]
